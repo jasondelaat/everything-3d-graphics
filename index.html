@@ -1,0 +1,1713 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-09-01 Mon 14:23 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Everything* you need to know about (the math behind) 3D Graphics Programming you can learn from the equation x = 2</title>
+<meta name="author" content="Jason DeLaat" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel='stylesheet' href='custom.css' />
+<link rel='stylesheet' href='normalize.css' />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Everything* you need to know about (the math behind) 3D Graphics Programming you can learn from the equation x = 2
+<br />
+<span class="subtitle">*to a rough first approximation</span>
+</h1>
+<details><summary>
+<p>
+Table of Contents
+</p>
+</summary>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgca2ce51">Introduction</a></li>
+<li><a href="#org9d5a7b0">Dimension One</a>
+<ul>
+<li><a href="#orgcb5d055">Points in 1D</a></li>
+<li><a href="#org7449cb9">Homogeneous Coordinates</a></li>
+<li><a href="#orga0b993c">The Point at Infinity</a></li>
+<li><a href="#orgfd28c75">Composable Translations</a></li>
+<li><a href="#orga15c737">Duality: The Lost Vector</a></li>
+</ul>
+</li>
+<li><a href="#orgdac8e9f">Dimension Two</a>
+<ul>
+<li><a href="#org5d728ac">Points, Equations and Duality in 2D</a></li>
+<li><a href="#orgddde331">Rotation and Translation</a></li>
+<li><a href="#org5e09cc8">Lines in 2D</a></li>
+<li><a href="#orgbfa8118">Points at Infinity in 2D</a></li>
+<li><a href="#orgd6d89cf">Normal Vectors and Normalized Lines</a></li>
+<li><a href="#org2c7fa77">Joining Points</a></li>
+<li><a href="#org2b1cd1f">Intersecting Lines</a></li>
+<li><a href="#org8a41063">Distance from a Line to a Point</a></li>
+<li><a href="#org8f422ec">Calculations in 2D</a></li>
+<li><a href="#orgb9e3550">Why Transforming Normal Vectors is Weird</a></li>
+</ul>
+</li>
+<li><a href="#orged98424">Dimension Three</a>
+<ul>
+<li><a href="#orgb2fdae3">The Whirlwind tour of 3D projective space</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</details>
+
+<div id="outline-container-orgca2ce51" class="outline-2">
+<h2 id="orgca2ce51">Introduction</h2>
+<div class="outline-text-2" id="text-orgca2ce51">
+<p>
+Most introductions to the math of 3D graphics I&rsquo;ve come across
+immediately get caught up in the details of why we use vectors with
+four components, \(4\times{}4\) matrices, and so on. That&rsquo;s
+understandable, those are the tools we use and you&rsquo;ll need to know how
+to use them. But I think there&rsquo;s also value in slowing down a bit.
+</p>
+
+<p>
+Ultimately, 3D graphics is about making things to be seen so being
+able to visualize what&rsquo;s going on behind the scenes can be useful. But
+visualizing the behaviour of vectors in four dimensions is, at best,
+difficult; we have to do it by analogy. Jumping straight into
+\(4\times{}4\) matrices bypasses a bunch of useful comparisons and
+potentially makes building intuition more difficult.
+</p>
+
+<p>
+My goal is to introduce some of the basic concepts of projective
+geometry in one and two dimensions, where we <i>can</i> fully visualize
+what&rsquo;s going on, to make the 3D case more approachable.
+</p>
+
+<p>
+I&rsquo;ll hopefully also show that 2D projective geometry is interesting
+and useful in its own right. Especially if you happen to be a
+programmer to whom the phrase, &ldquo;allergic to trigonometry,&rdquo; might
+apply. We won&rsquo;t calculate a single angle or evaluate a single trig
+function but we can still do quite a lot and, usually, easier.
+</p>
+
+<p>
+As I&rsquo;m mostly an enthusiatic hobbyist myself, this is aimed primarily
+at hobbyist programmers/game developers but might also be useful to
+undergrads looking to explore the math a little more than most <i>Intro
+to Graphics Programminig</i> courses usually do. That&rsquo;s not intended as
+an insult to such courses or a suggestion that you shouldn&rsquo;t take
+one. They have a lot of ground to cover and never enough time to cover
+it so just consider this bonus background material. I&rsquo;ve tried to show
+and explain things in plain language as well as I can with some more
+formal, but probably non-standard, definitions and notation where I
+thought they&rsquo;d be useful or necessary.
+</p>
+
+<p>
+I <i>think</i> the only prerequisites for understanding this essay are a
+decent understanding of basic vector operations: vector addition and
+subtraction, scalar multiplication, the dot product, and cross
+product. I mention matrices a few times but don&rsquo;t actually use them
+anywhere since I&rsquo;m trying to focus mainly on the concepts and not the
+calculations.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9d5a7b0" class="outline-2">
+<h2 id="org9d5a7b0">Dimension One</h2>
+<div class="outline-text-2" id="text-org9d5a7b0">
+</div>
+<div id="outline-container-orgcb5d055" class="outline-3">
+<h3 id="orgcb5d055">Points in 1D</h3>
+<div class="outline-text-3" id="text-orgcb5d055">
+<p>
+If we start with just a one dimensional space, a line, then we can
+think of the equation \(x = 2\) as describing a point/location within
+that space.
+</p>
+
+
+<div id="org15958e1" class="figure">
+<p><img src="images/1D-point.png" alt="1D-point.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>One dimensional Euclidean space showing the point \(x = 2\).</p>
+</div>
+
+<p>
+Slightly more formally we might say that a point in one dimension is
+the set of all 1D vectors, \((x)\), such that \(x\) satisfies the equation
+\(x = a\) for some real number \(a\).
+</p>
+
+<div class="definition" id="org44e5590">
+\begin{align}
+p := \{ (x) : x = a, \text{ for } a \in \mathbb{R} \} \label{1d-point-def}
+\end{align}
+
+</div>
+
+<p>
+Obviously this equation has only one solution so points are unique,
+singular objects. No point is the same as any other point.
+</p>
+
+<p>
+Now suppose we multiply both side of the equation by some non-zero
+constant \(\lambda\):
+</p>
+
+<div class="definition" id="org394fe23">
+\begin{align*}
+\lambda{}x = \lambda{}a
+\end{align*}
+
+</div>
+
+<p>
+It looks different but, in practical terms, it changes nothing at
+all. The new equation has the same solution as the old one. Although
+points are unique, any point can be represented by many different
+equations. We can use this idea to define scalar
+multiplication on our point like this:
+</p>
+
+<div class="definition" id="org9ce0d0c">
+\begin{align}
+\lambda{}p := \{ (x) : \lambda{}x = \lambda{}a, \text{ for } a, \lambda \in \mathbb{R}, \text{ and } \lambda \ne 0 \}. \label{1d-scalar-mul}
+\end{align}
+
+</div>
+
+<p>
+This is different than our usual understanding of scalar
+multiplication. Since (\ref{1d-point-def}) and (\ref{1d-scalar-mul})
+represent the same point we find ourselves in an unusual situation
+where,
+</p>
+
+<div class="definition" id="orgb74b17d">
+\begin{align}
+\lambda{}p = p, \text{ for } \lambda \ne 0. \label{hom-def}
+\end{align}
+
+</div>
+
+<p>
+Objects which have this property are called <b>homogeneous</b>. If you&rsquo;ve
+encountered 3D graphics programming before then &ldquo;homogeneous&rdquo; is
+probably a familiar word, as in &ldquo;homogeneous coordinates&rdquo; or even
+&ldquo;<i>the</i> homogeneous coordinate \(w\).&rdquo; And this is really all it means:
+multiplying the point by a (non-zero) constant doesn&rsquo;t change the
+point.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7449cb9" class="outline-3">
+<h3 id="org7449cb9">Homogeneous Coordinates</h3>
+<div class="outline-text-3" id="text-org7449cb9">
+<p>
+But the usual way we represent vectors <i>doesn&rsquo;t</i> have the homogeneous
+property at (\ref{hom-def}). The 1D vector \((x)\) isn&rsquo;t, in general,
+equal to \((\lambda{}x)\) so where do homogeneous coordinates come from?
+</p>
+
+<p>
+You may already know that we&rsquo;re going to need an &ldquo;extra&rdquo; dimension but
+why? And how does an extra dimension magically make points
+homogeneous? If we subtract \(a\) from both sides then we can rewrite
+the resulting equation, \(x - a = 0\), as a vector dot product:
+</p>
+
+<div class="definition" id="orgfea0104">
+\begin{align}
+(x, 1) \cdot (1, -a) &= 0. \label{hom-coords}
+\end{align}
+
+</div>
+
+<p>
+It&rsquo;s still the same equation for a one dimensional point but now in
+terms of two dimensional vectors. We can use the first vector, \((x,
+1)\), to represent the points of our 1D space. We&rsquo;ll come back to \((1,
+-a)\) shortly but for now lets see in what sense \((x, 1)\) can be called
+homogeneous.
+</p>
+
+<p>
+Since our vectors have two components we&rsquo;re dealing with a two
+dimensional space. We&rsquo;ll call the horizontal axis the x-axis, as
+usual, because it runs in the same direction as the 1D Euclidean space
+we started with. This is our Euclidean axis. The vertical axis is the
+extra one. It doesn&rsquo;t exist in the 1D Euclidean space that we&rsquo;re
+modelling, it&rsquo;s something new. We&rsquo;ll call this the w-axis.
+</p>
+
+<p>
+Since \(x\) represents the solution to a point equation, if we take
+every solution to every possible point equation, those solutions form
+the line \(w = 1\) in this new space. Let&rsquo;s call it the <b>view line</b>.
+</p>
+
+
+<div id="orgd73d2c9" class="figure">
+<p><img src="images/view-line.png" alt="view-line.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>The view line in projective space.</p>
+</div>
+
+<p>
+Think of the view line as a &ldquo;copy&rdquo; of our 1D Euclidean space embedded
+in this larger 2D space. This is a <b>one dimensional
+projective space.</b> One dimensional because that&rsquo;s the size of the
+Euclidean space we&rsquo;re modelling and &ldquo;projective&rdquo; indicating that
+we&rsquo;re working with the extra dimension, \(w\).
+</p>
+
+<p>
+In a sense, the view line is &ldquo;real space&rdquo; and everywhere else is
+&ldquo;extra space&rdquo; or &ldquo;other space.&rdquo; For a general vector in <i>other space</i>,
+\(p = (a, b)\), the only thing we&rsquo;re actually interested in is where \(p\)
+intersects the view line: where it crosses <i>real space</i>. That&rsquo;s why
+it&rsquo;s called <b>projective geometry</b>, because we take vectors like \(p\)
+and <i>project</i> them &#x2014; as in intersect them with, or extend them &#x2014;
+onto the view line.  Multiplying \(p\) by a constant changes its
+<i>length</i> but it doesn&rsquo;t change where the <i>intersection</i> occurs.
+</p>
+
+
+<div id="org853127a" class="figure">
+<p><img src="images/1D-point-scaled.gif" alt="1D-point-scaled.gif" />
+</p>
+<p><span class="figure-number">Figure 3: </span>Scaling the vector doesn&rsquo;t change the point it represents.</p>
+</div>
+
+<p>
+So, while it&rsquo;s true that \((\lambda{}a, \lambda{}b)\) is not, in
+general, <i>numerically</i> equivalent to \((a, b)\), they both represent the
+same 1D point \(\left( \frac{a}{b} \right)\) because \(\left(
+\frac{a}{b}, 1 \right)\) is where they both hit the view line.  The set
+of vectors \(\lambda{}(a, b)\) forms an <b>equivalence class</b> and it&rsquo;s in
+that sense that we can say,
+</p>
+
+<div class="definition" id="orgc4e16c1">
+\begin{align*}
+\lambda{}(a, b) &= (a, b), \text{ or simply} \\
+\lambda{}p &= p,
+\end{align*}
+
+</div>
+
+<p>
+and why they&rsquo;re called homogeneous coordinates.
+</p>
+
+<p>
+We&rsquo;ll call points directly on the view line &#x2014; points with a
+w-coordinate of 1 &#x2014; normalized points. So if \(p = (a, b)\), then the
+normalized form of \(p\), \(\tilde{p}\), is
+</p>
+
+<div class="definition" id="orgbb692ca">
+\begin{align*}
+\tilde{p} = \frac{1}{b}(a, b) = \left(\frac{a}{b}, 1 \right).
+\end{align*}
+
+</div>
+
+<p>
+They&rsquo;re the same point and most of the time we can use them
+interchangably but the normalized point, \(\tilde{p}\), contains the
+point&rsquo;s Euclidean representation while the more general \(p\) doesn&rsquo;t.
+</p>
+
+<p>
+Homogeneous coordinates come with some interesting and useful
+side-effects. For instance, in normal Euclidean space we can: add two
+vectors together to get another vector; add a vector to a point to get
+a new point; or even subtract one point from another to get a vector.
+But what does it mean to add two points together? In Euclidean space
+adding two points doesn&rsquo;t really make sense.
+</p>
+
+<p>
+In projective space, given the point \(p\) and \(q\), the midpoint, \(m\),
+between them is,
+</p>
+
+<div class="definition" id="org1692426">
+\begin{align*}
+m = \tilde{p} + \tilde{q}.
+\end{align*}
+
+</div>
+
+
+<div id="org35e4dd4" class="figure">
+<p><img src="images/mid-point.png" alt="mid-point.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>The sum of two points is their midpoint.</p>
+</div>
+
+<p>
+Another interesting consequence is that the view line in projective
+space is, in a sense, <i>larger</i> than the 1D Euclidean space it
+represents. By exactly <i>one point.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga0b993c" class="outline-3">
+<h3 id="orga0b993c">The Point at Infinity</h3>
+<div class="outline-text-3" id="text-orga0b993c">
+<p>
+In Euclidean space, lines stretch off forever in both directions and
+contain an infinite number of points. The view line in 1D projective
+space <i>also</i> stretches out forever in both directions and contains
+those same infinite number of points. And then it has one more.
+</p>
+
+<p>
+We&rsquo;ve said that a point is where the vector, \(p = (a, b)\), intersects
+the view line, \(w = 1\). But what if \(b = 0\)? In that case \(p\) <i>doesn&rsquo;t</i>
+intersect the view line so does it still represent a point? And if so,
+<i>what</i> point?  To answer that question, let&rsquo;s ask a different one:
+given some point on the view line, \(p = (x, 1)\), what happens as \(x\)
+gets larger?
+</p>
+
+
+<div id="org3033028" class="figure">
+<p><img src="images/1D-ideal-point.gif" alt="1D-ideal-point.gif" />
+</p>
+<p><span class="figure-number">Figure 5: </span>Moving a point very far away.</p>
+</div>
+
+<p>
+As \(x\) gets larger the angle between \(p\) and the <b>ground line</b>, \(w =
+0\), gets smaller. We can imagine, in the limiting case, as \(x\) goes to
+infinity the angle goes to zero. When that happens, \(p\) is parallel to
+the view line with a w-coordinate of zero. It&rsquo;s a tad long at that
+point but homogeneity lets us scale it back to something more
+convenient like, say, \((1, 0)\).
+</p>
+
+<p>
+Algebraically we could do this:
+</p>
+
+<div class="definition" id="org73652af">
+\begin{align*}
+p &= (x, 1) \\
+&= \frac{1}{x}(x, 1) \\
+&= \left(1, \frac{1}{x} \right), \text{ by the homogeneous property.} 
+\end{align*}
+
+</div>
+
+<p>
+Then, as \(x \rightarrow \infty\), the fraction \(\frac{1}{x}\) goes to
+zero so,
+</p>
+
+<div class="definition" id="orga82594d">
+\begin{align*}
+\lim_{x \rightarrow \infty}p = (1, 0).
+\end{align*}
+
+</div>
+
+<p>
+This point, \((1, 0)\) &#x2014; or any scalar multiple of it &#x2014; is called
+the <b>point at infinity</b> or the <b>ideal point</b>. Although it never
+intersects the view line it&rsquo;s still &ldquo;on&rdquo; the line in the sense that
+it&rsquo;s the limiting case as we go infinitely far to either the right or
+left. We&rsquo;ll never actually <i>reach</i> the point at infinity but we can
+always get closer to it. In Euclidean space we can have the <i>concept</i>
+of a point infinitely far away but the point doesn&rsquo;t actually
+exist. In projective space it&rsquo;s a real, tangible vector that
+we can manipulate like any other.
+</p>
+
+<p>
+Since the ideal point is parallel to the view line, adding it to a
+regular point moves us from one spot on the view line to another. It
+moves us in the direction of infinity by some amount. It&rsquo;s a
+<i>direction</i> and a <i>magnitude</i> confined entirely to the view line. Or,
+we might say, confined to Euclidean space. Another way to interpret
+ideal points is as the Euclidean vectors of the embedded space.
+</p>
+
+
+<div id="org2b893c4" class="figure">
+<p><img src="images/1d-vector.png" alt="1d-vector.png" />
+</p>
+<p><span class="figure-number">Figure 6: </span>Points at Infinity act like Euclidean vectors.</p>
+</div>
+
+<p>
+Note that for 1D projective space there is only one ideal point. The
+homogeneous property applies to ideal points just like normal points
+so any scalar multiple of a point at infinity is that same point at
+infinity. What changes is how <i>far</i>, or how <i>quickly</i>, we move towards
+infinity but, at least for now, it&rsquo;s always the same infinity.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfd28c75" class="outline-3">
+<h3 id="orgfd28c75">Composable Translations</h3>
+<div class="outline-text-3" id="text-orgfd28c75">
+<p>
+After all that we come to what is, probably, the main reason why
+projective geometry is used in graphics programming. In Euclidean
+space, translations &#x2014; moving from one location to another &#x2014; can&rsquo;t
+be written as a matrix transformation. Other types of transformations,
+like rotations, can and that lets us combine multiple transformations
+together using matrix multiplication. That&rsquo;s because translations are
+<b>affine tranformations</b> but matrices encode <b>linear
+transformations</b>. For our purposes the details don&rsquo;t really matter and
+it&rsquo;s been covered by others countless times before.
+</p>
+
+<p>
+The important thing is that combining transformations like this lets
+us apply one big transformation instead of having to individually
+apply a bunch of small ones. And when you have to apply the same
+transformation to hundreds, if not thousands, tens of thousands or
+even more points at a time, that kind of efficiency matters. A
+lot. Since translations in Euclidean space <i>can&rsquo;t</i> be expressed as a
+matrix, they <i>can&rsquo;t</i> be combined with other tranformations and that
+efficiency goes out the window. Making complex 3D objects move on
+screen in real time becomes a nightmare if not outright impossible.
+</p>
+
+<p>
+Homogeneous coordinates to the rescue: Rotating a point in projective space <i>looks like</i> a translation from
+the perspective of the view line and rotations <i>can</i> be combined. In
+practice we actually implement translations as a shear transformation
+rather than a pure rotation; it&rsquo;s both simpler and keeps the
+point on the view line but it&rsquo;s the rotation that&rsquo;s important. A shear
+is just a rotation plus scaling and we know, thanks to the homogeneous
+property, that scaling doesn&rsquo;t change the point.
+</p>
+
+
+<div id="orgff9bafc" class="figure">
+<p><img src="images/shear-transformation.gif" alt="shear-transformation.gif" />
+</p>
+<p><span class="figure-number">Figure 7: </span>Rotation in 2D projective space is translation in 1D Euclidean space.</p>
+</div>
+
+<p>
+That&rsquo;s where many explanations of 3D graphics math begins and
+ends. Why do we use coordinates with an extra dimension and a funny
+name? Because translations. The end.
+</p>
+
+<p>
+But we&rsquo;re just getting started.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga15c737" class="outline-3">
+<h3 id="orga15c737">Duality: The Lost Vector</h3>
+<div class="outline-text-3" id="text-orga15c737">
+<p>
+When we derived homogeneous coordinates, way back in equation
+(\ref{hom-coords}), it was as the first of two vectors. What ever
+happened to the other one? Most people focus on the points, and I get
+it those are important, but in my opinion you&rsquo;re throwing out most of
+the interesting and useful parts of projective geometry by ignoring
+the other one. So what&rsquo;s the deal with \((1, -a)\)?
+</p>
+
+<p>
+The second vector in equation (\ref{hom-coords}) is called a <b>dual
+vector</b> but I&rsquo;m going to call it an <b>equation vector</b> because I think
+that&rsquo;s a better description of what it actually is. And what it
+actually is, is the coefficients of an equation. Specifically the
+coefficients of the equation we used to define homogeneous
+coordinates, \(x - a = 0\). The coefficient of \(x\) is \(1\) and \(-a\) is a
+constant term.
+</p>
+
+<p>
+In general, an equation vector, \(L = (a, b)\), represents the equation
+\(ax + b = 0\). And what equation (\ref{hom-coords}) is actually telling
+us is that for some point in projective space, \(p\), and some equation
+vector, \(L\), then point \(p\) satisfies equation \(L\) if and only if,
+</p>
+
+<div class="definition" id="org746dd54">
+\begin{align}
+p \cdot L = 0. \label{perp}
+\end{align}
+
+</div>
+
+<p>
+Because of the properties of dot products we could instead say that
+point \(p\) satisfies equation \(L\), if \(p\) and \(L\) are
+perpendicular. That&rsquo;s another way to see why points <i>and</i> equations
+are homogeneous: the perpendicularity of two vectors doesn&rsquo;t depend on
+their lengths. If a given point satisfies a given equation then we can
+scale the point vector, or the equation vector, or <i>both</i> and
+(\ref{perp}) will still be true.
+</p>
+
+<p>
+Since both point vectors and equation vectors are vectors in two
+dimensions how do you tell them apart? In a sense, you don&rsquo;t.  Any
+vector in projective space, \((a, b)\), can represent <i>either</i> a point
+&#x2014; including a point at infinity &#x2014; <i>or</i> an equation. This idea that
+vectors can represent two different things is called a <b>dual
+representation</b> or just <b>duality</b>.
+</p>
+
+<p>
+Actually, there is one exception. The vector, \((0, 0)\), doesn&rsquo;t
+represent anything: It doesn&rsquo;t intersect the view line so it doesn&rsquo;t
+represent a Euclidean point; it doesn&rsquo;t give any direction information
+so it&rsquo;s not a point at infinity; and as an equation, \(0x + 0 = 0\), is
+indeterminant. The vector \((0, 0)\) is like a black hole in 1D
+projective space. For every <i>other</i> vector, whether it represents a
+point or an equation depends on context and how you&rsquo;re using it. I&rsquo;ll
+use the following conventions from here on.
+</p>
+
+<dl class="org-dl">
+<dt>Point Vectors</dt><dd>lowercase letters, coordinates in
+angle brackets: \(p = \left< a, b \right>\), \(v = \left< a, 0 \right>\), etc. When \(b \ne 0\),
+these represent Euclidean <i>points</i> and when \(b = 0\) they represent
+points at infinity which can be thought of as Euclidean <i>vectors</i>.</dd>
+<dt>Normalized Point</dt><dd>tilde, w-coordinate equal to one: \(\tilde{p} =
+  \left< \frac{a}{b}, 1 \right>\).</dd>
+<dt>Normalized Ideal Points</dt><dd>Normalized in the usual sense of being a
+unit vector. In 1D this is either \(\left< 1, 0 \right>\) or \(\left<
+  -1, 0 \right>\) since, by the homogeneous property, this is the
+<i>only</i> ideal point and these are the only multiples which are unit length.</dd>
+<dt>Equation Vectors</dt><dd>uppercase letters, coordinates in square
+brackets: \(L = [a, b]\). We&rsquo;ll discuss normalized equation vectors
+when we get to two dimensions.</dd>
+</dl>
+
+<p>
+We can say the point \(\left< a, b \right>\) is <b>dual to</b> or the <b>dual
+of</b> equation \([a, b]\) and vice versa.
+</p>
+
+<p>
+As far as I know, this is not standard notation.  The different
+brackets don&rsquo;t actually change anything or affect how operations like
+the dot product work, I&rsquo;m just using them to help keep the context
+clear.
+</p>
+
+<p>
+Equation vectors really start flexing their muscles in two dimensions
+but there&rsquo;s one last thing we can say about them here: No point can
+ever satisfy its own dual equation because no vector can ever be
+perpendicular to itself. 
+</p>
+
+<p>
+Algebraically,
+</p>
+
+<div class="definition" id="org1c2dce5">
+\begin{align*}
+\left< a, b \right> \cdot [a, b] = a^2 + b^2 \ne 0.
+\end{align*}
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdac8e9f" class="outline-2">
+<h2 id="orgdac8e9f">Dimension Two</h2>
+<div class="outline-text-2" id="text-orgdac8e9f">
+</div>
+<div id="outline-container-org5d728ac" class="outline-3">
+<h3 id="org5d728ac">Points, Equations and Duality in 2D</h3>
+<div class="outline-text-3" id="text-org5d728ac">
+<p>
+In two dimensions we can&rsquo;t define a point with a single equation like
+we could in one dimensions. But we can use one equation for the
+x-coordinate and another for the y-coordinate:
+</p>
+
+<div class="definition" id="orgd33efc9">
+\begin{align}
+&ax + c_1 = 0  \label{x-coord} \\
+&by + c_2 = 0, \label{y-coord}
+\end{align}
+
+</div>
+
+<p>
+where \(a, b, c_1\), and \(c_2\) are all real numbers.
+</p>
+
+<p>
+Then we can define points and scalar multiplication in the same way:
+</p>
+
+<div class="definition" id="org907583c">
+\begin{align*}
+p &:= \{ (x,y) : ax - c_1 = 0 \text{ and } by - c_2 = 0 \}, \text{ and} \\
+\\
+\lambda{}p &:= \{ (x,y) : \lambda{}(ax - c_1 = 0) \text{ and } \lambda{}(by - c_2 = 0), \text{ for } \lambda \ne 0 \}.
+\end{align*}
+
+</div>
+
+<p>
+Again both \(p\) and \(\lambda{}p\) give the same solutions and therefore
+represent the same point. Points in 2D are also unique and also
+homogeneous.
+</p>
+
+<p>
+To get homogeneous coordinates we can simply add the two coordinate
+equations, (\ref{x-coord}) and (\ref{y-coord}), together into a single
+equation. If we do that, and let \(c = c_1 + c_2\), we get
+</p>
+
+<div class="definition" id="orgcd81092">
+\begin{align*}
+ax + by + c = 0
+\end{align*}
+
+</div>
+
+<p>
+which, as a dot product, becomes
+</p>
+
+<div class="definition" id="org96560bf">
+\begin{align}
+(x, y, 1) \cdot (a, b, c) = 0. \label{2d-hom}
+\end{align}
+
+</div>
+
+<p>
+So our (normalized) point vectors have the form \(p = \left< x, y, 1
+\right>\) and equation vectors look like \(L = [a, b, c]\).
+</p>
+
+<p>
+As before, we&rsquo;ve embedded a Euclidean space into a larger projective
+space with one extra dimension. Labelling our Euclidean axes with the
+familiar \(x\) and \(y\) and the extra projective axis as \(w\), the
+embedded space is again at \(w = 1\). Though in this case it&rsquo;s a view
+<i>plane</i> rather than a view line.
+</p>
+
+
+<div id="orgcfe152a" class="figure">
+<p><img src="images/2D-point.png" alt="2D-point.png" />
+</p>
+<p><span class="figure-number">Figure 8: </span>Points on the view plane in 2D projective space.</p>
+</div>
+
+<p>
+Equation vectors in 1D were the equations of points so, in a sense,
+both point vectors and equation vectors represented points. The
+equation \(ax + by + c = 0\) isn&rsquo;t a point, it&rsquo;s a line: In 2D, points
+are dual to lines. Even though 2D equation vectors represent a
+different kind of object than 1D equation vectors, the relationship we
+saw at (\ref{perp}) between point vectors and equation vectors still
+holds. Point, \(p\), is on line, \(L\), if and only if \(p \cdot L =
+0\).
+</p>
+
+
+<div id="org6b88e71" class="figure">
+<p><img src="images/2d-line.png" alt="2d-line.png" />
+</p>
+<p><span class="figure-number">Figure 9: </span>Top-down view (w-axis not shown) of a 2D point and its dual line.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgddde331" class="outline-3">
+<h3 id="orgddde331">Rotation and Translation</h3>
+<div class="outline-text-3" id="text-orgddde331">
+<p>
+We saw that rotations in 1D projective space corresponded to
+translations in 1D Euclidean space. The same thing happens in 2D
+projective space but not for all rotations. Rotations around the
+w-axis correspond to rotations in 2D Euclidean space while rotations
+around the other axes correspond to translations.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><img src="images/2d-rotation-cropped.gif" alt="2d-rotation-cropped.gif" /></td>
+<td class="org-left"><img src="images/2d-translation-cropped.gif" alt="2d-translation-cropped.gif" /></td>
+</tr>
+</tbody>
+</table>
+
+<div class="multi-fig">
+
+<div id="org1e0911a" class="figure">
+<p><img src="images/ph.png" alt="ph.png" />
+</p>
+<p><span class="figure-number">Figure 10: </span>Rotation and Translation in 2D.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5e09cc8" class="outline-3">
+<h3 id="org5e09cc8">Lines in 2D</h3>
+<div class="outline-text-3" id="text-org5e09cc8">
+<p>
+So points are dual to lines. But <i>why</i> are points dual to lines? Okay,
+yes, the derivation of 2D homogeneous coordinates gave us the equation
+of a line. But that&rsquo;s not a very satisfying answer. What&rsquo;s going on,
+geometrically, that results in a line?
+</p>
+
+<p>
+Remember what equation (\ref{perp}) is telling us: a point
+satisfies an equation, if the point vector and equation vector are
+perpendicular. If \(L\) is the equation vector for a line, taking
+<i>every</i> point on the line means finding <i>every</i> vector perpendicular
+to \(L\); every vector perpendicular to \(L\) forms a plane. Because the
+plane perpendicular to \(L\) contains <i>points</i>, what we want to know
+about them is where they intersect the view plane. And the
+intersection of two planes is a line.
+</p>
+
+
+<div id="org2d720c9" class="figure">
+<p><img src="images/2D-line-plane.png" alt="2D-line-plane.png" />
+</p>
+<p><span class="figure-number">Figure 11: </span>A 2D point and its dual line formed by the intersection of the view plane with the perpendicular plane; the line&rsquo;s point at infinity is the intersection of the perpendicular plane with the ground plane.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbfa8118" class="outline-3">
+<h3 id="orgbfa8118">Points at Infinity in 2D</h3>
+<div class="outline-text-3" id="text-orgbfa8118">
+<p>
+Just as the view line in 1D contained a point at infinity, so too does
+<i>every</i> line in 2D. There are infinitely many lines so there are also
+infinitely many points at infinity. And just like before, they have a
+w-coordinate of zero and are parallel to the view plane. We can think
+of them as Euclidean vectors because they indicate directions in the
+embedded space. Specifically, a line&rsquo;s point at infinity is the vector
+indicating the direction of the line, as seen in the figure above.
+</p>
+
+<p>
+We can find the ideal point, \(v\), of a line, \(L\), with any two points
+on that line. Given points \(p\) and \(q\),
+</p>
+
+<div class="definition" id="org4e3ef2e">
+\begin{align*}
+&v = \tilde{p} - \tilde{q}, \text{ or}\\
+&v = \lambda{}(\tilde{p} - \tilde{q}), \text{ for } \lambda \ne 0, \text{ by the homogeneous property.}
+\end{align*}
+
+</div>
+
+<p>
+Note that since the ideal point is a <i>point</i> on the line, it should
+satisfy (\ref{perp}). That is, \(v \cdot L\) should equal zero.
+</p>
+
+\begin{align*}
+v \cdot L &= (p - q) \cdot L \\
+&= p \cdot L - q \cdot L.
+\end{align*}
+
+<p>
+Since we took \(p\) and \(q\) to be points on the line we know that \(p
+\cdot L = q \cdot L = 0\) by (\ref{perp}) so,
+</p>
+
+<div class="definition" id="org0aa3fe2">
+\begin{align*}
+v = p \cdot L - q \cdot L = 0.
+\end{align*}
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd6d89cf" class="outline-3">
+<h3 id="orgd6d89cf">Normal Vectors and Normalized Lines</h3>
+<div class="outline-text-3" id="text-orgd6d89cf">
+<p>
+If we have a line, it&rsquo;s pretty common that we&rsquo;re also going to want
+the line&rsquo;s normal vector. And, luckily for us, the normal vector is
+part of the equation vector itself. For a line, \(L = [a, b, c]\), its
+normal vector, \(n_L\), is
+</p>
+
+<div class="definition" id="orga15dc1c">
+\begin{align*}
+n_L = \left< a, b, 0 \right>.
+\end{align*}
+
+</div>
+
+<p>
+One way to define a line in two dimensions is by it&rsquo;s 2D Euclidean
+normal vector, we&rsquo;ll call it \(n_{(E)}\), and a distance. This is
+another way we can think of the equation vector, we could write it as
+\(L = [n_{(E)}, c]\). Since \(n_{(E)}\) has two components \(L\), as a
+whole, has three components.
+</p>
+
+<p>
+So for line, \(L = [a, b, c]\), the Euclidean normal vector is, \(n_{(E)}
+= (a, b)\), and the distance is \(c\). Specifically, \(c\) is the <b>signed,
+perpendicular distance</b> from the line to the origin, multiplied by the
+<i>magnitude</i> of \(n_{(E)}\). If \(n_{(E)}\) is a unit vector then \(c\) is
+just the distance to the origin.
+</p>
+
+<p>
+Note that \(c\) is a <i>signed</i> distance in the direction of \(n_{(E)}\). It
+can be either positive or negative depending on which way the normal
+vector is pointing. The distance is measured <i>from</i> the line <i>to</i> the
+origin not the other way around. That will be important soon.
+</p>
+
+
+<div id="org550ba0d" class="figure">
+<p><img src="images/line-normal.png" alt="line-normal.png" />
+</p>
+<p><span class="figure-number">Figure 12: </span>Two lines with the same normal vector. One with positive distance to the origin (top) and the other with negative distance to the origin (bottom)</p>
+</div>
+
+<p>
+Since the line already contains its <i>Euclidean</i> normal vector, to get its
+<i>homogeneous</i> normal vector, we just keep \(n_{(E)}\) but throw away
+\(c\), hence,
+</p>
+
+<div class="definition" id="org496f36e">
+\begin{align*}
+n_L = \left< n_{(E)}, 0 \right> = \left< a, b, 0 \right>.
+\end{align*}
+
+</div>
+
+<p>
+Another way to look at it is that \(n_L\) is the shadow of \(L\) onto the
+ground plane. Since \(L\) is perpendicular to the plane of points which
+make up the line in projective space, it&rsquo;s shadow is naturally
+perpendicular to the line in Euclidean space or, equivalently, \(n_L\)
+is perpendicular to the line&rsquo;s ideal point.
+</p>
+
+
+<div id="orgbe0ba37" class="figure">
+<p><img src="images/normal-shadow.png" alt="normal-shadow.png" />
+</p>
+<p><span class="figure-number">Figure 13: </span>A line&rsquo;s normal vector \(n_L\) seen as the shadow of \(L\).</p>
+</div>
+
+<p>
+The normal vector, \(n_L\), is normal in the sense of being
+perpendicular to the line but it&rsquo;s not necessarily a unit vector.  We
+can make it one by normalizing the line. For line, \(L\), the normalized
+line, \(\tilde{L}\), is
+</p>
+
+<div class="definition" id="orgf10aee2">
+\begin{align*}
+\tilde{L} = \frac{L}{|n_{(E)}|} = \frac{L}{|n_L|}.
+\end{align*}
+
+</div>
+
+<p>
+Note that \(\tilde{L}\) will not, in general, be a unit vector but
+\(n_{\tilde{L}}\) will be.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2c7fa77" class="outline-3">
+<h3 id="org2c7fa77">Joining Points</h3>
+<div class="outline-text-3" id="text-org2c7fa77">
+<p>
+Suppose we have two points, \(p\) and \(q\), and we want to find the line
+through them. If \(L\) is the equation vector we&rsquo;re looking for, then it
+must be perpendicular to every point on the line. In particular, \(L\)
+must be perpendicular to both \(p\) and \(q\).  In three dimensions, we
+have an operation which gives us a vector perpendicular to two others:
+the cross product.
+</p>
+
+<p>
+The line through \(p\) and \(q\) is,
+</p>
+
+<div class="definition" id="org3f73941">
+\begin{align*}
+L= p \times q.
+\end{align*}
+
+</div>
+
+<p>
+This even works when one of the points is a point at infinity. The
+line joining point \(p\) and vector \(v\), for instance, is the line
+through \(p\) in the direction of \(v\).
+</p>
+
+<p>
+If <i>both</i> points are points at infinity the we get the line containing
+<i>every</i> point at infinity. No point on this line will ever intersect
+the view plane, so we call this the <b>line at infinity</b>. The line at
+infinity, \([0, 0, 1]\), is dual to the origin of the view plane,
+\(\left< 0, 0, 1 \right>\). One way to remember that this is the line at
+infinity, is that attempting to normalize \([0, 0, 1]\) would mean
+dividing by zero.
+</p>
+
+
+<div id="org88fb2fe" class="figure">
+<p><img src="images/joins.png" alt="joins.png" />
+</p>
+<p><span class="figure-number">Figure 14: </span>Joining points into lines: (left) 2 Euclidean points; (middle) Euclidean point and ideal point; (right) 2 ideal points.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2b1cd1f" class="outline-3">
+<h3 id="org2b1cd1f">Intersecting Lines</h3>
+<div class="outline-text-3" id="text-org2b1cd1f">
+<p>
+What about the opposite problem? You have two lines, \(L\) and \(M\), and
+want to find their intersection, \(p\)? Well, \(p\) must be on both \(L\)
+and \(M\) and therefore must be perpendicular to both \(L\) and \(M\). It&rsquo;s
+actually the <i>same</i> problem. The intersection is,
+</p>
+
+<div class="definition" id="orgb1165ed">
+\begin{align*}
+p = L \times M.
+\end{align*}
+
+</div>
+
+<p>
+This is a fundamental property of duality: for any true statement
+about points, we get another true statement about lines for free. Any
+two points in 2D are sufficient to define a line and, by duality, any
+two lines in 2D are sufficient to define a point, their point of
+intersection.
+</p>
+
+<p>
+But wait a second: <i>any</i> two lines define a point? That can&rsquo;t be
+right. What about parallel lines? Am I going to tell you that parallel
+lines intersect?
+</p>
+
+<p>
+Yes. Yes, I am.
+</p>
+
+<p>
+Remember that a line&rsquo;s ideal point indicates its direction.  Parallel
+lines, by definition, run in the same direction. That means parallel
+lines all share the same ideal point: they intersect <i>at infinity</i>.
+</p>
+
+
+<div id="org441dee1" class="figure">
+<p><img src="images/parllel-intersection.png" alt="parllel-intersection.png" />
+</p>
+<p><span class="figure-number">Figure 15: </span>The intersection of two parallel lines is a point at infinity. Perpendicular vectors for \(L\) and \(M\) omitted.</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8a41063" class="outline-3">
+<h3 id="org8a41063">Distance from a Line to a Point</h3>
+<div class="outline-text-3" id="text-org8a41063">
+<p>
+Up to now we&rsquo;ve only been considering points on the line. The
+equation \(p \cdot L = 0\) is the basis of everything we&rsquo;ve done so
+far. But what about points <i>not</i> on the line?
+</p>
+
+<p>
+Given a line, \(L\), and a point, \(p\), the dot product gives us
+the Euclidean distance, \(\delta\), from the point to the line:
+</p>
+
+<div class="definition" id="orgbe98e61">
+\begin{align*}
+\delta = \tilde{L} \cdot \tilde{p}.
+\end{align*}
+
+</div>
+
+<p>
+Both the line and the point are normalized here because otherwise
+we&rsquo;ll get some multiple of the distance rather than the distance
+itself. That might be okay depending on what you&rsquo;re doing but usually
+we want the actual distance. The distance, \(\delta\), is a signed,
+perpendicular distance in the direction of \(n_{\tilde{L}}\) or,
+equivalently, \(n_{(E)}\). And of course, if the point is actually on
+the line, that distance is zero.
+</p>
+
+<p>
+So how does it work? Well for starters, we can do a similar thing for
+point vectors as we did for equation vectors when discussing
+normalized lines. We can write a normalized, homogeneous point vector
+as its Euclidean coordinates, \(p_{(E)} = (x, y)\), with a &rsquo;1&rsquo; tacked on
+the end. Then we have,
+</p>
+
+<div class="definition" id="orgf35f7c6">
+\begin{align*}
+\tilde{p} \cdot \tilde{L} &= \left< p_{(E)}, 1 \right> \cdot [n_{(E)}, c] \\
+&= p_{(E)} \cdot n_{(E)} + c.
+\end{align*}
+
+</div>
+
+<p>
+Since we&rsquo;ve normalized \(L\), the magnitude of \(n_{(E)}\) is one meaning
+\(c\) is the distance from the line to the origin. What about \(p_{(E)}
+\cdot n_{(E)}\)? This projects \(p_{(E)}\) onto \(n_{(E)}\), giving us the
+distance <i>from</i> the origin <i>to</i> the point in the direction of
+\(n_{(E)}\). The two distances partially cancel out and we&rsquo;re left
+with just the distance from \(L\) to \(p\).
+</p>
+
+
+<div id="org7f3176b" class="figure">
+<p><img src="images/perp-dist.png" alt="perp-dist.png" />
+</p>
+<p><span class="figure-number">Figure 16: </span>Calculating the perpendicular distance from \(L\) to \(p\).</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f422ec" class="outline-3">
+<h3 id="org8f422ec">Calculations in 2D</h3>
+<div class="outline-text-3" id="text-org8f422ec">
+<p>
+Lines, intersections and distances. It may not seem like much but a
+lot of calculations in 2D, especially for games, come down to some
+combination of finding distances to and/or intersections with
+lines. Not everything, of course, but a lot of things. Here are just a
+couple. I encourage you to play around with them and think about how
+to use these ideas to solve other 2D geometry problems. Assume that
+all points and lines are normalized.
+</p>
+</div>
+
+<div id="outline-container-org4080101" class="outline-4">
+<h4 id="org4080101">Reflection of a point across a line</h4>
+<div class="outline-text-4" id="text-org4080101">
+<p>
+The reflection of a point, \(p\), across a line, \(L\), is
+</p>
+
+<div class="definition" id="orgfd0d6e2">
+\begin{align*}
+p' = p - 2(p \cdot L)n_L.
+\end{align*}
+
+</div>
+
+
+<div id="orgfa8e756" class="figure">
+<p><img src="images/reflection.png" alt="reflection.png" />
+</p>
+</div>
+
+<p>
+This one is pretty straight-forward: \(p \cdot L\) is just the distance
+from the line to the point as discussed above. To get the reflected
+point we want to double that distance but in the direction opposite to
+\(n_L\). Then just add that to \(p\) and you&rsquo;re done.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0cc59a9" class="outline-4">
+<h4 id="org0cc59a9">Area of a triangle</h4>
+<div class="outline-text-4" id="text-org0cc59a9">
+<p>
+If the points \(a, b\) and \(c\) are the vertices of a triangle, the area, \(A\),
+of the triangle is,
+</p>
+
+<div class="definition" id="org9beeace">
+\begin{align*}
+A = \frac{| a \cdot (b \times c)|}{2}.
+\end{align*}
+
+</div>
+
+
+<div id="org2662e6c" class="figure">
+<p><img src="images/triangle.png" alt="triangle.png" />
+</p>
+</div>
+
+<p>
+We know the area of a triangle is half the base times the
+height. If we let \(L = b \times c\), Then \(a \cdot \tilde{L}\) would be
+the height of the dashed line in the picture. But actually, we <i>don&rsquo;t</i>
+normalize \(L\) here.
+</p>
+
+<p>
+Remember, \(\tilde{L} = \frac{L}{|n_L|}\), so the height is:
+</p>
+
+<div class="definition" id="orgfc719f7">
+\begin{align*}
+h = a \cdot \tilde{L} = \frac{a \cdot L}{|n_L|} = \frac{a \cdot (b \times c)}{|n_L|}.
+\end{align*}
+
+</div>
+
+<p>
+But the magnitude of \(n_L\) turns out to be the same as the magnitude
+of \(b - c\): the base of the triangle. So the base times the height is
+just \(a \cdot (b \times c)\). That value could be positive or negative
+so we take the absolute value, divide by two, and there&rsquo;s your area.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2a509d8" class="outline-4">
+<h4 id="org2a509d8">Intersection of a ray and a line</h4>
+<div class="outline-text-4" id="text-org2a509d8">
+<p>
+Casting a ray from \(p\) towards \(L\), find the point of intersection,
+\(q\), if it exists.
+</p>
+
+
+<div id="orgedf81c7" class="figure">
+<p><img src="images/line-ray.png" alt="line-ray.png" />
+</p>
+</div>
+
+<p>
+We can express the point, \(q\), as
+</p>
+
+<div class="definition" id="org5c50ba3">
+\begin{align}
+q = p + \alpha{}v. \label{in-front}
+\end{align}
+
+</div>
+
+<p>
+Since we&rsquo;re looking for a \(q\) that&rsquo;s on \(L\), we know that \(q \cdot L =
+0\). We can dot \(L\) with both sides of (\ref{in-front}) to find \(\alpha\):
+</p>
+
+<div class="definition" id="orgbf70ba5">
+\begin{align*}
+&q \cdot L = (p + \alpha{}v) \cdot L \\\\
+&0 = p \cdot L + \alpha{}(v \cdot L)\\\\
+&\alpha = \frac{-(p \cdot L)}{v \cdot L}.
+\end{align*}
+
+</div>
+
+<p>
+If \(\alpha\) is negative then the line is behind \(p\) and no
+intersection occurs. Otherwise, if \(\alpha\) is positive, use equation
+(\ref{in-front}) to find \(q\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0da98d6" class="outline-4">
+<h4 id="org0da98d6">Intersection of a ray and a line segment</h4>
+<div class="outline-text-4" id="text-org0da98d6">
+<p>
+The points \(a\) and \(b\) are the end points of line segment \(\overline{ab}\). Casting
+a ray from \(p\) in direction \(v\), find the point of intersection, \(q\),
+if it exists. 
+</p>
+
+
+<div id="org33e0aa2" class="figure">
+<p><img src="images/line-segment.png" alt="line-segment.png" />
+</p>
+</div>
+
+<p>
+Start by finding, \(\alpha\), as above where \(L = a \times b\). If
+\(\alpha\) is positive then we know the ray hits \(L\) but to check if it
+hits \(\overline{ab}\) we need an extra step. Another way to find \(q\) is,
+</p>
+
+<div class="definition" id="org09a7360">
+\begin{align}
+&q = b + \beta (a - b). \label{eq-2}
+\end{align}
+
+</div>
+
+<p>
+This is a simple linear interpolation so as long as \(\beta\) is between
+zero and one, \(q\) will be somewhere on the line segment. 
+</p>
+
+<p>
+Finding \(\beta\) is just like finding \(\alpha\) except this time using
+the fact that \(q \cdot R = 0\), where \(R = p \times v\). We get,
+</p>
+
+<div class="definition" id="org637e190">
+\begin{align*}
+\beta = \frac{-(b \cdot R)}{(a - b) \cdot R}.
+\end{align*}
+
+</div>
+
+<p>
+If \(\beta\) is between zero and one, use either (\ref{in-front}) or
+(\ref{eq-2}) to find \(q\). Otherwise \(q\) will be either
+above or below \(\overline{ab}\) so no intersection occurs.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb9e3550" class="outline-3">
+<h3 id="orgb9e3550">Why Transforming Normal Vectors is Weird</h3>
+<div class="outline-text-3" id="text-orgb9e3550">
+<p>
+Finally, I want to look at what can seem like a bit of a mystery the
+first time you encounter it. When you apply a transformation to a
+bunch of points, typically you also want to transform associated
+normal vectors. But if you use the same transformation it doesn&rsquo;t
+work; the normals get all messed up.  We usually encounter this
+problem in 3D, where normals are needed to calculate lighting, but the
+same problem exists in 2D as well.
+</p>
+
+
+<div id="orgf13ddec" class="figure">
+<p><img src="images/normal-trans.png" alt="normal-trans.png" />
+</p>
+<p><span class="figure-number">Figure 18: </span>Two points and the normal vector of the line segment between them before (left) and after (right) applying a shear transformation. The normal vector is transformed incorrectly.</p>
+</div>
+
+<p>
+This confused me for ages. I knew <i>that</i> it was a problem and I knew
+<i>mechanically</i> how to correct the problem. But the reason <i>why</i> it was
+a problem bugged me. One explanation is that while points can move
+from one location in space to another, vectors are always rooted at
+the origin and that&rsquo;s what causes the problem. That&rsquo;s an okay
+explanation but I never found it particularly satisfying. But, I
+think, there&rsquo;s a better one: the &ldquo;problem&rdquo; is duality.
+</p>
+
+<p>
+Although points and lines, or more generally points and equations, are
+dual to each other, they&rsquo;re fundamentally different objects. But
+<i>because</i> they&rsquo;re dual to each other, as a collection of coordinates,
+they look the same and we can&rsquo;t necessarily distinguish one from the
+other. As I said earlier, whether a given vector represents a point or
+an equation depends on context.
+</p>
+
+<p>
+But remember that a line can be defined by its Euclidean normal vector
+and a distance. The line <i>contains</i> its normal vector and the whole
+reason we&rsquo;re interested in normal vectors in the first place is
+because of the line, or plane in 3D, that it&rsquo;s normal <i>to.</i> It&rsquo;s not
+the normal <i>vector</i> that we want to transform but the <i>line itself.</i>
+The transformation we use to transform points will act on \(\left< a,
+b, 0 \right>\) when what we actually want to transform is \([a, b, 0]\)
+and a different object requires a different transformation.
+</p>
+
+<p>
+I won&rsquo;t do a full derivation here but if you&rsquo;re familiar with linear
+algebra and want to try it yourself, you can start with the point
+joining formula we saw earlier: \(L = p \times q\). Let \(M\) be the
+matrix for transforming points and \(N\) be the matrix for transforming
+lines. You can figure out \(N\) by tranforming the points first and
+calculating the new line:
+</p>
+
+<div class="definition" id="org418ee09">
+\begin{align*}
+NL = Mp \times Mq.
+\end{align*}
+
+</div>
+
+<p>
+You should find that \(N\) is the transpose of the inverse of \(M\):
+</p>
+
+<div class="definition" id="orgd16b0a5">
+\begin{align*}
+N = (M^{-1})^T.
+\end{align*}
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orged98424" class="outline-2">
+<h2 id="orged98424">Dimension Three</h2>
+<div class="outline-text-2" id="text-orged98424">
+<p>
+For an essay claiming to explain the math of 3D graphics, I&rsquo;m going to
+spend very little time actually talking about 3D projective
+space. Partly because, having already buried you in words, I don&rsquo;t
+want to throw a ton of 4D matrices on top and partly because that&rsquo;s
+the stuff actual graphics programming courses and tutorials will cover
+in detail.
+</p>
+
+<p>
+That said, let me give you&#x2026;
+</p>
+</div>
+
+<div id="outline-container-orgb2fdae3" class="outline-3">
+<h3 id="orgb2fdae3">The Whirlwind tour of 3D projective space</h3>
+<div class="outline-text-3" id="text-orgb2fdae3">
+<p>
+The central equation which defined both our 1D and 2D projective spaces
+was,
+</p>
+
+<div class="definition" id="orgc9eac92">
+\begin{align*}
+p \cdot L = 0.
+\end{align*}
+
+</div>
+
+<p>
+When calculating distances from lines to points in 2D we re-wrote that
+as:
+</p>
+
+<div class="definition" id="org67e2864">
+\begin{align}
+\tilde{p} \cdot \tilde{L} = \left< p_{(E)}, 1 \right> \cdot [n_{(E)}, d] = p_{(E)} \cdot n_{(E)} + d = 0, \label{n-dim}
+\end{align}
+
+</div>
+
+<p>
+where both \(p_{(E)}\) and \(n_{(E)}\) were 2D Euclidean vectors and I&rsquo;ve
+used \(d\) instead of \(c\) for the distance.  Just like we embedded a
+Euclidean space into a larger projective space, we&rsquo;re cramming
+Euclidean vectors as sub-components into larger vectors.
+</p>
+
+<p>
+Now here&rsquo;s the punchline: Since the dot product is well defined for
+vectors in <i>any</i> number of dimensions, equation (\ref{n-dim}) actually
+describes <i>all</i> projective spaces. If we let \(p_{(E)}\) and \(n_{(E)}\)
+be one dimensional vectors, we get the 1D projective space that we
+started with. If we let them be three dimensional we get 3D
+projective space. And if, for some reason, you want to do projective
+geometry in, say, 42 dimensions, now you know where to start.
+</p>
+
+<p>
+In 3D:
+</p>
+<ul class="org-ul">
+<li>Point vectors, which you were probably already familiar with,
+look like, \(p = \left< x, y, z, 1 \right>\).</li>
+<li>Equation vectors, \(L = [a, b, c, d]\), are the equations of planes,
+\(ax + by + cz + d = 0\), because in 3D \(n_{(E)}\) is perpendicular to
+a plane with \(d\) being the signed, perpendicular distance from the
+plane to the origin, just like \(c\) was the signed, perpendicular
+distance from a line to the origin in 2D.</li>
+</ul>
+
+<p>
+Everything we learned in one and two dimensions still applies. A
+sub-set of 4D rotations correspond to 3D translations while the rest
+correspond to 3D rotations or some combination of the two; points at
+infinity correspond to Euclidean vectors; parallel lines intersect at
+at infinity; and so on. Even many of the formulas don&rsquo;t change: the
+sum of two normalized points is always their midpoint; reflection
+across a plane in 3D uses the exact same formula as reflection across
+a line in 2D; finding the distance from a plane to a point is just a
+dot product away; checking if a ray hits a particular triangle on a 3D
+mesh is, not identical, but similar to checking for intersections with
+line segments in 2D; etc.
+</p>
+
+<p>
+When we go up a dimension we also get some new things. In 1D, we only
+had one point at infinity. In 2D, we had infinitely many points at
+infinity but only one line at infinity. Now, in 3D, we have infinitely
+many lines at infinity &#x2014; each of which is the intersection of
+parallel planes &#x2014; and a single plane at infinity, \([0, 0, 0, 1]\),
+which is dual to the origin, \(\left< 0, 0, 0, 1 \right>\), of the
+embedded space. Two points were sufficient to define a line in 2D and
+duality let us say that two lines were therefore also sufficient to
+define a point in 2D. Similarly, three points in 3D uniquely define a
+plane and, again by duality, three planes uniquely define a 3D
+point. Granted, calculating them isn&rsquo;t quite as straight-forward as a
+simple cross product, but the principle is the same.
+</p>
+
+<p>
+And that&rsquo;s about it. There&rsquo;s obviously a lot more to graphics
+programming than what I&rsquo;ve covered here. If you&rsquo;ve found the math of
+3D graphics, homogeneous coordinates, and so on confusing in the past,
+hopefully this has helped.
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
